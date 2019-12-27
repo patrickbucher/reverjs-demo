@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/patrickbucher/reverjs-demo#readme",
   "dependencies": {
-    "reverjs": "0.0.7"
+    "reverjs": "0.0.8"
   }
 }
