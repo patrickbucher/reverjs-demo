@@ -28,6 +28,21 @@ function render(fields) {
             }
             fieldDiv.classList.add(style);    
         }
+        const playerOne = document.getElementById('playerOne');
+        const playerTwo = document.getElementById('playerTwo');
+        const result = board.result();
+        playerOne.textContent = result.playerOne;
+        playerTwo.textContent = result.playerTwo;
+        if (result.finished) {
+            const resultDiv = document.getElementById('result');
+            if (result.tied) {
+                resultDiv.textContent = 'The game ends with a tie.';
+            } else if (result.winner == 1) {
+                resultDiv.textContent = 'Black Wins';
+            } else if (result.winner == 2) {
+                resultDiv.textContent = 'White Wins';
+            }
+        }
     }
 
     function selectField(e) {
