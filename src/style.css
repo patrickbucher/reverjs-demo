@@ -1,0 +1,34 @@
+body {
+    font-family: sans-serif;
+    margin: 1em 1em;
+}
+
+div#board {
+    padding: 0;
+    margin: 0;
+}
+
+div#board>div.field {
+    float: left;
+    border: 1px solid black;
+    width: 64px;
+    height: 64px;
+    margin: 4px;
+    border-radius: 100%;
+}
+
+div.empty {
+    background-color: #b7deaf;
+}
+
+div.playerOne {
+    background-color: black;
+}
+
+div.playerTwo {
+    background-color: white;
+}
+
+.clear {
+    clear: both;
+}
