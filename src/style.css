@@ -8,6 +8,11 @@ div#header {
     font-weight: bold;
 }
 
+div#header p {
+    display: inline-block;
+    padding-right: 2em;
+}
+
 div#header>p#result {
     color: red;
 }

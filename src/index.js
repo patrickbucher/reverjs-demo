@@ -36,7 +36,7 @@ function render(fields) {
         if (result.finished) {
             const resultDiv = document.getElementById('result');
             if (result.tied) {
-                resultDiv.textContent = 'The game ends with a tie.';
+                resultDiv.textContent = 'Tied';
             } else if (result.winner == 1) {
                 resultDiv.textContent = 'Black Wins';
             } else if (result.winner == 2) {
