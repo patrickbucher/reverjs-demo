@@ -1,6 +1,7 @@
 body {
     font-family: sans-serif;
-    margin: 1em 1em;
+    margin: 1em auto;
+    width: 600px;
 }
 
 div#header {
