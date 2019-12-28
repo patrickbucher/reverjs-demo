@@ -2,8 +2,10 @@
   "name": "reverjs-demo",
   "version": "0.0.1",
   "description": "Local Reversi game in the browser to demonstrate reverjs library.",
-  "main": "src/index.js",
-  "scripts": {},
+  "main": "main.js",
+  "scripts": {
+      "dist": "browserify main.js -o bundle.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/patrickbucher/reverjs-demo.git"
@@ -20,6 +22,9 @@
   },
   "homepage": "https://github.com/patrickbucher/reverjs-demo#readme",
   "dependencies": {
-    "reverjs": "0.0.8"
+    "reverjs": "0.0.9"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0"
   }
 }

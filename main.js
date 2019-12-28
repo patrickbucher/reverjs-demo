@@ -1,5 +1,7 @@
 'use strict';
 
+let Board = require('reverjs');
+
 let board = new Board();
 render(board.fields);
 
