@@ -47,3 +47,12 @@ div.playerTwo {
 .clear {
     clear: both;
 }
+
+div#status {
+    clear: both;
+    float: none;
+    font-size: 24px;
+    font-weight: bold;
+    padding-top: 32px;
+    color: red;
+}

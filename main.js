@@ -1,19 +1,48 @@
 'use strict';
 
 let Board = require('reverjs');
-
 let board = new Board();
 render(board.fields);
 
+function deleteChildren(container) {
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+}
+
+function fieldId(row, col) {
+    return `${row}-${col}`;
+}
+
+function randomElement(array) {
+    if (array.length < 1) {
+        throw new RangeError('array is empty');
+    }
+    const index = Math.floor(Math.random() * array.length);
+    return array[index];
+}
+
+// TODO: This is the "AI". Improve it to play against a stronger player.
+function opponentMove(board, player) {
+    return randomOpponentMove(board, player);
+}
+
+function randomOpponentMove(board, player) {
+    const moves = board.validMoves(player);
+    if (moves.size < 1) {
+        return undefined;
+    }
+    const move = randomElement([...moves]);
+    return move;
+}
+
 function render(fields) {
     const boardDiv = document.getElementById('board');
-    while (boardDiv.firstChild) {
-        boardDiv.removeChild(boardDiv.firstChild);
-    }
+    deleteChildren(boardDiv);
     for (let row in fields) {
         for (let col in fields[row]) {
             const fieldDiv = document.createElement('div');
-            fieldDiv.id = `${row}-${col}`;
+            fieldDiv.id = fieldId(row, col);
             boardDiv.appendChild(fieldDiv);
             fieldDiv.classList.add('field');
             if (col % 8 == 0) {
@@ -35,6 +64,7 @@ function render(fields) {
         const result = board.result();
         playerOne.textContent = result.playerOne;
         playerTwo.textContent = result.playerTwo;
+        const statusDiv = document.getElementById('status');
         if (result.finished) {
             const resultDiv = document.getElementById('result');
             if (result.tied) {
@@ -44,10 +74,15 @@ function render(fields) {
             } else if (result.winner == 2) {
                 resultDiv.textContent = 'White Wins';
             }
+            statusDiv.textContent = 'Reload page to restart the game';
+        } else {
+            statusDiv.textContent = '';
         }
     }
 
     function selectField(e) {
+        let unableToMove = 0;
+        const statusDiv = document.getElementById('status');
         const moves = board.validMoves(1);
         if (moves.size > 0) {
             const id = e.target.id;
@@ -62,24 +97,37 @@ function render(fields) {
                 }
             }
             if (!valid) {
-                window.alert('invalid move');
+                statusDiv.textContent = 'invalid move';
+                setTimeout(() => {
+                    statusDiv.textContent = '';
+                }, 2000);
                 return;
             }
             board = board.play(row, col, 1);
-            document.getElementById(`${row}-${col}`).removeEventListener('click', selectField);
+            const pickedFieldId = fieldId(row, col);
+            document.getElementById(pickedFieldId).removeEventListener('click', selectField);
             render(board.fields);
+            if (board.result().finished) {
+                return;
+            }
+        } else {
+            unableToMove++;
+            statusDiv.textContent = 'Black is unable to move, skipping...';
         }
         setTimeout(() => {
-            const opponentMoves = board.validMoves(2);
-            if (opponentMoves.size > 0) {
-                const moveIndex = Math.floor(Math.random() * opponentMoves.size);
-                const [r, c] = [...opponentMoves][moveIndex];
-                board = board.play(r, c, 2);
-                document.getElementById(`${r}-${c}`).removeEventListener('click', selectField);
-                render(board.fields);
-            } else {
-                console.log('opponent is stuck, your turn');
+            const move = opponentMove(board, 2);
+            if (move === undefined) {
+                unableToMove++;
+                statusDiv.textContent = 'White is unable to move, skipping...';
+                if (unableToMove == 2) {
+                    statusDiv.textContent = 'Game is stuck (no more possible moves)';
+                }
+                return;
             }
+            const [r, c] = move;
+            board = board.play(r, c, 2);
+            document.getElementById(`${r}-${c}`).removeEventListener('click', selectField);
+            render(board.fields);
         }, 1000);
     }
 }
