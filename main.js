@@ -128,6 +128,6 @@ function render(fields) {
             board = board.play(r, c, 2);
             document.getElementById(`${r}-${c}`).removeEventListener('click', selectField);
             render(board.fields);
-        }, 1000);
+        }, 1500);
     }
 }
