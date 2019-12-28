@@ -23,11 +23,22 @@ function randomElement(array) {
 }
 
 // TODO: This is the "AI". Improve it to play against a stronger player.
+//
+// Ideas:
+//
+// 1) Apply all valid moves to board and pick the one with the best outcome.
+// 2) Try to capture the corners (can't be taken away).
+// 3) Try not to capture the three fields around the corner, for they give the
+//    opponent a chance to capture the corner.
+// 4) Apply the Minimax algorithm (with recursion) too simulate n moves ahead.
+// 5) Try to capture whole triangles around the corners, which cannot be taken
+//    away afterwards.
+// 6) [insert your idea]
 function opponentMove(board, player) {
-    return randomOpponentMove(board, player);
+    return randomMove(board, player);
 }
 
-function randomOpponentMove(board, player) {
+function randomMove(board, player) {
     const moves = board.validMoves(player);
     if (moves.size < 1) {
         return undefined;
@@ -128,6 +139,6 @@ function render(fields) {
             board = board.play(r, c, 2);
             document.getElementById(`${r}-${c}`).removeEventListener('click', selectField);
             render(board.fields);
-        }, 1500);
+        }, 1250);
     }
 }
