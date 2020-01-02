@@ -1,7 +1,8 @@
 body {
     font-family: sans-serif;
     margin: 1em auto;
-    width: 600px;
+    width: 608px;
+    background-color: #efefef;
 }
 
 div#header {
@@ -25,7 +26,7 @@ div#board {
 
 div#board>div.field {
     float: left;
-    border: 1px solid black;
+    border: 2px solid black;
     width: 64px;
     height: 64px;
     margin: 4px;
@@ -33,7 +34,7 @@ div#board>div.field {
 }
 
 div.empty {
-    background-color: #b7deaf;
+    background-color: #bedead;
 }
 
 div.playerOne {
