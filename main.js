@@ -35,7 +35,49 @@ function randomElement(array) {
 //    away afterwards.
 // 6) [insert your idea]
 function opponentMove(board, player) {
-    return randomMove(board, player);
+    return minimaxMove(board, player, 3, Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+}
+
+function minimaxMove(board, player, depth, alpha, beta) {
+    const opponent = player == 1 ? 2 : 1;
+    let bestMove = undefined;
+    let bestLead = Number.MIN_SAFE_INTEGER;
+    const validMoves = board.validMoves(player)
+    if (validMoves.length == 0) {
+        return undefined;
+    }
+    const emptyFields = board.fieldsWithState(0);
+    depth = depth > emptyFields ? emptyFields : depth;
+    for (const move of validMoves) {
+        let newBoard = board.play(move[0], move[1], player);
+        if (depth > 0) {
+            const nextMove = minimaxMove(newBoard, opponent, depth - 1);
+            if (nextMove) {
+                newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -alpha);
+            }
+        }
+        const standing = newBoard.result();
+        const diff = standing.playerOne - standing.playerTwo;
+        const lead = player == 1 ? diff : diff * -1;
+        if (lead > bestLead) {
+            bestLead = lead;
+            bestMove = move;
+            if (bestLead > alpha) {
+                if (alpha == Number.MIN_SAFE_INTEGER) {
+                    alpha = bestLead;
+                } else {
+                    return bestMove;
+                }
+            }
+        }
+        if (-lead < beta) {
+            beta = -lead;
+        }
+    }
+    if (bestMove === undefined) {
+        bestMove = randomMove(board, player);
+    }
+    return bestMove;
 }
 
 function randomMove(board, player) {
