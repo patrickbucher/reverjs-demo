@@ -54,21 +54,22 @@ function minimaxMove(board, player, depth, alpha, beta) {
     depth = depth > emptyFields ? emptyFields : depth;
     for (const move of validMoves) {
         let newBoard = board.play(move[0], move[1], player);
+        let standing = newBoard.result();
         if (depth > 0) {
             const nextMove = minimaxMove(newBoard, opponent, depth - 1);
             if (nextMove) {
                 newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -bestLead);
+                standing = newBoard.result();
             }
         }
-        const standing = newBoard.result();
         const diff = standing.playerOne - standing.playerTwo;
         const lead = player == 1 ? diff : diff * -1;
         if (lead > bestLead) {
             bestLead = lead;
+            bestMove = move;
             if (bestLead >= beta) {
                 return move;
             }
-            bestMove = move;
         }
     }
     if (bestMove === undefined) {
