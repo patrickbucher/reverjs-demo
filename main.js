@@ -57,7 +57,7 @@ function minimaxMove(board, player, depth, alpha, beta) {
         if (depth > 0) {
             const nextMove = minimaxMove(newBoard, opponent, depth - 1);
             if (nextMove) {
-                newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -alpha);
+                newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -bestLead);
             }
         }
         const standing = newBoard.result();
@@ -68,6 +68,7 @@ function minimaxMove(board, player, depth, alpha, beta) {
             if (bestLead >= beta) {
                 return move;
             }
+            bestMove = move;
         }
     }
     if (bestMove === undefined) {
