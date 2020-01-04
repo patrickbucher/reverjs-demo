@@ -35,7 +35,7 @@ function randomElement(array) {
 //    away afterwards.
 // 6) [insert your idea]
 function opponentMove(board, player) {
-    // TODO: raise level for stronger bot
+    // TODO: raise level for stronger (but slower) bot
     const minimaxLevel = 3;
     const min = Number.MIN_SAFE_INTEGER;
     const max = Number.MAX_SAFE_INTEGER;
@@ -45,7 +45,7 @@ function opponentMove(board, player) {
 function minimaxMove(board, player, depth, alpha, beta) {
     const opponent = player == 1 ? 2 : 1;
     let bestMove = undefined;
-    let bestLead = alpha;
+    let value = -Infinity
     const validMoves = board.validMoves(player)
     if (validMoves.length == 0) {
         return undefined;
@@ -58,18 +58,21 @@ function minimaxMove(board, player, depth, alpha, beta) {
         if (depth > 0) {
             const nextMove = minimaxMove(newBoard, opponent, depth - 1);
             if (nextMove) {
-                newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -bestLead);
+                newBoard = newBoard.play(nextMove[0], nextMove[1], opponent, -beta, -alpha);
                 standing = newBoard.result();
             }
         }
         const diff = standing.playerOne - standing.playerTwo;
-        const lead = player == 1 ? diff : diff * -1;
-        if (lead > bestLead) {
-            bestLead = lead;
-            bestMove = move;
-            if (bestLead >= beta) {
-                return move;
-            }
+        const next = player == 1 ? diff: -diff;
+        if (next > value) {
+            value = next
+            bestMove = move
+        }
+        if (next >= beta) {
+            return bestMove
+        }
+        if (next > alpha) {
+            alpha = next
         }
     }
     if (bestMove === undefined) {
